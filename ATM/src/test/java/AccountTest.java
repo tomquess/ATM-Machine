@@ -88,10 +88,10 @@ public class AccountTest {
 				Arguments.of(Double.MAX_VALUE, 1.7976931348623157E308)
 		);
 	}
-	@Disabled
+
 	@ParameterizedTest
 	@MethodSource("provideArgumentsForCalcCheckTransfer")
-	void calcCheckTransfer_ShouldReturnTheNewSavingBalance(double amount, double result1, double result2) {
+	void calcCheckTransfer_ShouldReturnTheNewSavingBalanceAndNewCheckingBalance(double amount, double result1, double result2) {
 
 		//Arrange
 		Account account = new Account(1, 4321, 1200.0, 600.0);
@@ -109,13 +109,37 @@ public class AccountTest {
 	// Handling method
 	private static Stream<Arguments> provideArgumentsForCalcCheckTransfer() {
 		return Stream.of(
-				Arguments.of(200, 1000,1600),
-				Arguments.of(400, 1600),
-				Arguments.of(600, 1800),
-				Arguments.of(0, 1200),
-				Arguments.of(-550, 650),
-				Arguments.of(999999, 1001199),
-				Arguments.of(Double.MAX_VALUE, 1.7976931348623157E308)
+				Arguments.of(200, 1000, 800),
+				Arguments.of(400, 800, 1000),
+				Arguments.of(1200, 0, 1800),
+				Arguments.of(Double.MAX_VALUE, -1.7976931348623157E308, 1.7976931348623157E308)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource("provideArgumentsForCalcSavingTransfer")
+	void calcSavingTransfer_ShouldReturnTheNewCheckingBalanceAndNewSavingBalance(double amount, double result1, double result2) {
+
+		//Arrange
+		Account account = new Account(1, 4321, 1200.0, 600.0);
+
+		//Act
+		account.calcSavingTransfer(amount);
+
+		//Assert
+		assertEquals(account.getCheckingBalance(),result1);
+		assertEquals(account.getSavingBalance(),result2);
+
+
+
+	}
+	// Handling method
+	private static Stream<Arguments> provideArgumentsForCalcSavingTransfer() {
+		return Stream.of(
+				Arguments.of(200, 1400, 400),
+				Arguments.of(400, 1600, 200),
+				Arguments.of(1200, 2400, -600),
+				Arguments.of(Double.MAX_VALUE, 1.7976931348623157E308, -1.7976931348623157E308)
 		);
 	}
 
