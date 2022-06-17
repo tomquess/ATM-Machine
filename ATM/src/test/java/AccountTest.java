@@ -1,9 +1,20 @@
 package src.test.java;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
+import java.util.stream.Stream;
+
 import src.main.java.Account;
+
+
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class AccountTest {
 
@@ -34,5 +45,79 @@ public class AccountTest {
 		assertEquals(account.getSavingBalance(), 400);
 		
 	}
+
+	@Test
+	void calcCheckingDeposit_ShouldReturnTheNewCheckingBalance() {
+
+		//Arrange
+		Account account = new Account(1, 4321, 1200.0, 600.0);
+
+		//Act
+		account.calcCheckingDeposit(200);
+
+		//Assert
+		assertEquals(account.getCheckingBalance(), 1400);
+
+	}
+
+
+	@ParameterizedTest
+	@MethodSource("provideArgumentsForReturnTheNewSavingBalance")
+	void calcSavingDeposit_ShouldReturnTheNewSavingBalance(double amount, double result) {
+
+		//Arrange
+		Account account = new Account(1, 4321, 1200.0, 600.0);
+
+		//Act
+		account.calcCheckingDeposit(amount);
+
+		//Assert
+		assertEquals(account.getCheckingBalance(),result);
+
+
+	}
+	// Handling method
+	private static Stream<Arguments> provideArgumentsForReturnTheNewSavingBalance() {
+		return Stream.of(
+				Arguments.of(200, 1400),
+				Arguments.of(400, 1600),
+				Arguments.of(600, 1800),
+				Arguments.of(0, 1200),
+				Arguments.of(-550, 650),
+				Arguments.of(999999, 1001199),
+				Arguments.of(Double.MAX_VALUE, 1.7976931348623157E308)
+		);
+	}
+	@Disabled
+	@ParameterizedTest
+	@MethodSource("provideArgumentsForCalcCheckTransfer")
+	void calcCheckTransfer_ShouldReturnTheNewSavingBalance(double amount, double result1, double result2) {
+
+		//Arrange
+		Account account = new Account(1, 4321, 1200.0, 600.0);
+
+		//Act
+		account.calcCheckTransfer(amount);
+
+		//Assert
+		assertEquals(account.getCheckingBalance(),result1);
+		assertEquals(account.getSavingBalance(),result2);
+
+
+
+	}
+	// Handling method
+	private static Stream<Arguments> provideArgumentsForCalcCheckTransfer() {
+		return Stream.of(
+				Arguments.of(200, 1000,1600),
+				Arguments.of(400, 1600),
+				Arguments.of(600, 1800),
+				Arguments.of(0, 1200),
+				Arguments.of(-550, 650),
+				Arguments.of(999999, 1001199),
+				Arguments.of(Double.MAX_VALUE, 1.7976931348623157E308)
+		);
+	}
+
 	
 }
