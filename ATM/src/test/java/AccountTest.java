@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.stream.Stream;
 
 import src.main.java.Account;
@@ -17,6 +19,34 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class AccountTest {
+
+	@Test
+	void setCustomerNumber_ShouldReturnCorrectCustomerNumberAfterCustomerNumberChange() {
+
+		//Arrange
+		Account account = new Account(1, 1234, 1250.0, 500.0);
+
+		//Act
+		account.setCustomerNumber(5);
+
+		//Assert
+		assertEquals(account.getCustomerNumber(), 5);
+
+	}
+
+	@Test
+	void setPinNumber_ShouldReturnCorrectCustomerNumberAfterCustomerPinChange() {
+
+		//Arrange
+		Account account = new Account(1, 1234, 1250.0, 500.0);
+
+		//Act
+		account.setPinNumber(4321);
+
+		//Assert
+		assertEquals(account.getPinNumber(), 4321);
+
+	}
 
 	@Test
 	void calcCheckingWithdraw_ShouldReturnTheNewCheckingBalanceAfterWithdraw() {
@@ -142,6 +172,22 @@ public class AccountTest {
 				Arguments.of(Double.MAX_VALUE, 1.7976931348623157E308, -1.7976931348623157E308)
 		);
 	}
+
+//	@Test
+//	void getCheckingWithdrawInput_ShouldReturnTheNewCheckingBalance() {
+//
+//		//Arrange
+//		Account account = new Account(1, 4321, 1200.0, 600.0);
+//		InputStream sysInBackup = System.in;
+//		ByteArrayInputStream in = new ByteArrayInputStream("500".getBytes());
+//		System.setIn(in);
+//		//Act
+//		account.getCheckingWithdrawInput();
+//
+//		//Assert
+//		assertEquals(account.getCheckingBalance(), 1400);
+//
+//	}
 
 	
 }
