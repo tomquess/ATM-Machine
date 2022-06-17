@@ -1,3 +1,4 @@
+package src.main.java;
 import java.text.DecimalFormat;
 import java.util.InputMismatchException;
 import java.util.Scanner;
